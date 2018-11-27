@@ -1,0 +1,34 @@
+To create a webservice, first we need to create a controller. A controller is a class that can
+handle http requests.
+Second thing is to create a method that processes a request.
+To mention spring MVC that a class is a controller, use annotation @RestController
+To create a mapping of which Rest request method is accepted by our restcontroller, use annotation
+@RequestMapping(method = RequestMethod.GET, path = "/hello-world")
+Our method processes GET request made to URI /hello-world.
+Instead of @RequestMapping annotation, you can also use @GetMapping annotation
+@GetMapping(path = "/hello-world") 
+This is more simpler. Similarly you can do @PostMapping, @PutMapping etc.
+ You can also create a method that returns a bean. In that case the bean should have appropriate getter.
+ Otherwise white label error occurs when you do a GET request in local host:8080.
+ Error :  
+ No converter found for return value of type: class com.in28minutes.rest.webservices.restfulwebservices.HelloWorldBean 
+ The bean returned by the method is converted to Json format for display in local host.
+ Spring Auto Configuration : How it works in the back ground
+ ***********************************************************
+ Spring boot Starter web added during the project creation has a dependency on Spring MVC which provides
+ Dispatcher Servlet is in class path.
+ Dispatcher servlet handles all the requests first. It follows a pattern called front controller for spring MVC framework.
+ Dispatcher servlet knows all mappings of URI to methods. It determines the right controller and right method to execute for a request.
+ When a object is returned from a method, dispatcher servlet has to determine the format in which the object has to be returned to the user.
+ @RestController annotation has another annotation called @Responsebody that makes sure the response is mapped by a message convertor to some other format. In this case
+ Message Convertor uses  Jackson2 binding to convert object to Json format. 
+ Springboot auto configures Error, dispatcher servlet etc.
+ Http Message convertor takes care of converting POJO to Json format using Jackson 2 binding.
+ 
+ 
+ Including a path variable in URI
+ *********************************
+ @GetMapping(path = "/hello-world/path-variable/{name}")
+	public HelloWorldBean helloWorldPathVariable(@PathVariable String name) {
+		return new HelloWorldBean(String.format("Hello World, %s", name));
+	}
